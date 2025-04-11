@@ -91,6 +91,7 @@ pytz==2025.1
 PyYAML==6.0.2
 pyzmq==26.4.0
 referencing==0.36.2
+regex==2024.11.6
 requests==2.32.3
 rpds-py==0.23.1
 rsa==4.9
@@ -102,6 +103,7 @@ stack-data==0.6.3
 starlette==0.46.1
 streamlit==1.43.2
 tenacity==9.0.0
+tiktoken==0.9.0
 toml==0.10.2
 tornado==6.4.2
 tqdm==4.67.1

@@ -2,6 +2,7 @@ import streamlit as st
 import asyncio
 import os
 import requests
+import glob
 
 main_page = __import__("Home_Page")
 API_BASE = "http://localhost:8000"
@@ -57,8 +58,25 @@ if st.session_state.user_email and st.session_state.user_name:
         if st.session_state.tabs:
             tab_to_delete = st.selectbox("❌ Select Job to Delete", st.session_state.tabs)
             if st.button("Delete Job"):
-                # st.session_state.tabs.remove(tab_to_delete)
                 delete_tab_from_api(tab_to_delete)
+
+                pattern = os.path.join("resume/", f"resume-{tab_to_delete}*")
+                files_to_delete = glob.glob(pattern)
+                for file in files_to_delete:
+                    try:
+                        os.remove(file)
+                        print(f"Deleted: {file}")
+                    except Exception as e:
+                        print(f"Error deleting {file}: {e}")
+                pattern = os.path.join("cover-letter/", f"cover-letter-{tab_to_delete}*")
+                files_to_delete = glob.glob(pattern)
+                for file in files_to_delete:
+                    try:
+                        os.remove(file)
+                        print(f"Deleted: {file}")
+                    except Exception as e:
+                        print(f"Error deleting {file}: {e}")
+
                 st.session_state.tabs = fetch_tabs_from_api()
                 st.warning(f"Deleted Job: {tab_to_delete}")
 

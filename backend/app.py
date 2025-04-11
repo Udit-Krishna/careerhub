@@ -17,6 +17,7 @@ from pydantic import BaseModel
 from openai import OpenAI
 import requests
 from fpdf import FPDF
+import tiktoken
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -235,6 +236,12 @@ async def get_job_id(request: Request):
             )).first()
     return JSONResponse(content={"job_uuid" : row[0]})
 
+def truncate_to_200k_tokens(text, model="gpt-4o-mini"):
+    enc = tiktoken.encoding_for_model(model)
+    tokens = enc.encode(text)
+    truncated_tokens = tokens[:100_000]
+    return enc.decode(truncated_tokens)
+
 @app.post("/fetch-description")
 async def fetch_description(request: Request):
     data = await request.json()
@@ -255,7 +262,7 @@ async def fetch_description(request: Request):
             },
             {
                 "role": "user",
-                "content": content
+                "content": truncate_to_200k_tokens(content)
             }
         ],
         max_tokens=512,
