@@ -136,6 +136,37 @@ class Skills(Base):
 
     def __repr__(self):
         return f"{self.unique_id}, {self.skills}"
+    
+class UserJobs(Base):
+    __tablename__ = "user_jobs"
+    job_id = Column("job_id", String, primary_key=True)
+    unique_id = Column("unique_id", String)
+    job_name = Column("job_name", String)
 
+    def __init__(self, job_id, unique_id, job_name):
+        self.job_id = job_id
+        self.unique_id = unique_id
+        self.job_name = job_name
+
+    def __repr__(self):
+        return f"{self.job_id} {self.unique_id} {self.job_name}"
+
+class Jobs(Base):
+    __tablename__ = "jobs"
+    job_id = Column("job_id", String, primary_key=True)
+    unique_id = Column("unique_id", String)
+    job_name = Column("job_name", String)
+    job_url = Column("job_url", Text)
+    job_desc = Column("job_desc", Text)
+
+    def __init__(self, job_id, unique_id, job_name, job_url, job_desc):
+        self.job_id = job_id
+        self.unique_id = unique_id
+        self.job_name = job_name
+        self.job_url = job_url
+        self.job_desc = job_desc
+
+    def __repr__(self):
+        return f"{self.job_id} {self.unique_id} {self.job_name} {self.job_url} {self.job_desc}"
 
 Base.metadata.create_all(bind=engine)

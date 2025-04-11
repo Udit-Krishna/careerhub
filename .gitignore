@@ -2,3 +2,8 @@
 .venv/
 __pycache__/
 careerhub-925c0-a27bf0c92293.json
+backend/resume/*
+frontend/resume/*
+backend/cover-letter/*
+frontend/cover-letter/*
+trial.ipynb
