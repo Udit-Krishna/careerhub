@@ -100,60 +100,61 @@ if st.session_state.user_email and st.session_state.user_name:
                             st.warning("Please enter a job URL.")
                 st.text_area("Job Description", key=job_desc_key, height=200, disabled=True)
 
-                response = requests.get("http://localhost:8000/get-job-uuid", json={"unique_id": st.session_state.user_email, "job_name": job_name})
-                job_uuid = response.json().get("job_uuid")
-                resume_path = f"./resume/resume-{job_name}-{job_uuid}.pdf"
-                letter_path = f"./cover-letter/cover-letter-{job_name}-{job_uuid}.pdf"
-                
-                if os.path.exists(resume_path):
-                    with open(resume_path, "rb") as file:
-                        st.download_button(
-                            label="📥 Download Tailored Resume PDF",
-                            data=file,
-                            file_name=os.path.basename(resume_path),
-                            mime="application/pdf"
-                        )
-                else:
-                    if st.button("Generate Tailored Resume for this Job", key=f"btn_resume_{job_name}"):
-                        response = requests.get("http://localhost:8000/load-details",
-                                        params={"unique_id": st.session_state.user_email})
-                        response_json = dict(response.json())
-                        data = {}
-                        for k,v in response_json.items():
-                            data[k] = v
-                        response = requests.post("http://localhost:8000/generate-tailored-resume",
-                                    json={"data": data, "job_desc" : st.session_state[job_desc_key]}
-                        )
-                        if response.status_code == 200:
-                            file_name = '_'.join(st.session_state.user_name.split())
-                            with open(resume_path, "wb") as f:
-                                f.write(response.content)
-                            st.rerun()
+                if st.session_state[job_desc_key]:
+                    response = requests.get("http://localhost:8000/get-job-uuid", json={"unique_id": st.session_state.user_email, "job_name": job_name})
+                    job_uuid = response.json().get("job_uuid")
+                    resume_path = f"./resume/resume-{job_name}-{job_uuid}.pdf"
+                    letter_path = f"./cover-letter/cover-letter-{job_name}-{job_uuid}.pdf"
+                    
+                    if os.path.exists(resume_path):
+                        with open(resume_path, "rb") as file:
+                            st.download_button(
+                                label="📥 Download Tailored Resume PDF",
+                                data=file,
+                                file_name=os.path.basename(resume_path),
+                                mime="application/pdf"
+                            )
+                    else:
+                        if st.button("Generate Tailored Resume for this Job", key=f"btn_resume_{job_name}"):
+                            response = requests.get("http://localhost:8000/load-details",
+                                            params={"unique_id": st.session_state.user_email})
+                            response_json = dict(response.json())
+                            data = {}
+                            for k,v in response_json.items():
+                                data[k] = v
+                            response = requests.post("http://localhost:8000/generate-tailored-resume",
+                                        json={"data": data, "job_desc" : st.session_state[job_desc_key]}
+                            )
+                            if response.status_code == 200:
+                                file_name = '_'.join(st.session_state.user_name.split())
+                                with open(resume_path, "wb") as f:
+                                    f.write(response.content)
+                                st.rerun()
 
-                if os.path.exists(letter_path):
-                    with open(letter_path, "rb") as file:
-                        st.download_button(
-                            label="📥 Download Cover Letter PDF",
-                            data=file,
-                            file_name=os.path.basename(letter_path),
-                            mime="application/pdf"
-                        )
-                else:
-                    if st.button("Generate Cover Letter for this Job", key=f"btn_cover_letter_{job_name}"):
-                        response = requests.get("http://localhost:8000/load-details",
-                                        params={"unique_id": st.session_state.user_email})
-                        response_json = dict(response.json())
-                        data = {}
-                        for k,v in response_json.items():
-                            data[k] = v
-                        response = requests.post("http://localhost:8000/generate-cover-letter",
-                                    json={"resume": data ,"job_desc" : st.session_state[job_desc_key]}
-                        )
-                        if response.status_code == 200:
-                            file_name = '_'.join(st.session_state.user_name.split())
-                            with open(letter_path, "wb") as f:
-                                f.write(response.content)
-                            st.rerun()
+                    if os.path.exists(letter_path):
+                        with open(letter_path, "rb") as file:
+                            st.download_button(
+                                label="📥 Download Cover Letter PDF",
+                                data=file,
+                                file_name=os.path.basename(letter_path),
+                                mime="application/pdf"
+                            )
+                    else:
+                        if st.button("Generate Cover Letter for this Job", key=f"btn_cover_letter_{job_name}"):
+                            response = requests.get("http://localhost:8000/load-details",
+                                            params={"unique_id": st.session_state.user_email})
+                            response_json = dict(response.json())
+                            data = {}
+                            for k,v in response_json.items():
+                                data[k] = v
+                            response = requests.post("http://localhost:8000/generate-cover-letter",
+                                        json={"resume": data ,"job_desc" : st.session_state[job_desc_key]}
+                            )
+                            if response.status_code == 200:
+                                file_name = '_'.join(st.session_state.user_name.split())
+                                with open(letter_path, "wb") as f:
+                                    f.write(response.content)
+                                st.rerun()
                         
     else:
         st.info("No Jobs available. Add one from the sidebar to get started.")
