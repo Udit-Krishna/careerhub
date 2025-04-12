@@ -166,6 +166,7 @@ def delete_files(directory: str, base_name: str):
 async def generate_resume(content: dict, background_tasks: BackgroundTasks):
     rand_uuid = str(uuid.uuid1().int)
     directory = "resume/"
+    os.makedirs("resume/", exist_ok=True)
     await generate_latex(content['data'], rand_uuid)
     background_tasks.add_task(delete_files, directory, rand_uuid)
     return FileResponse(path=directory + rand_uuid + ".pdf",
@@ -356,6 +357,7 @@ async def generate_tailored_resume(request: Request, background_tasks: Backgroun
     resume = data['resume']
     job_desc = data['job_desc']
     rand_uuid = str(uuid.uuid1().int)
+    os.makedirs("cover-letter/", exist_ok=True)
     directory = "cover-letter/"
     completion = openai_client.chat.completions.create(
         model="gpt-4o-mini",
