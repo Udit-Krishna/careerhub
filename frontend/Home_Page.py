@@ -252,6 +252,7 @@ def main():
                 )                                
                 if response.status_code == 200:
                     file_name = '_'.join(st.session_state.user_name.split())
+                    os.makedirs("resume/", exist_ok=True)
                     with open(f"resume/resume_{file_name}.pdf", "wb") as f:
                         f.write(response.content)
                     side_col2.success("Resume generated successfully!")
