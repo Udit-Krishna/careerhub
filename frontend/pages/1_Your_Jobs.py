@@ -7,7 +7,7 @@ import glob
 main_page = __import__("Home_Page")
 API_BASE = "http://localhost:8000"
 
-st.set_page_config(page_title="Your Jobs", layout="wide")
+# st.set_page_config(page_title="Your Jobs", layout="wide")
 os.makedirs("resume/", exist_ok=True)
 os.makedirs("cover-letter/", exist_ok=True)
 
