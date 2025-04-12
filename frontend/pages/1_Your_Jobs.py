@@ -7,6 +7,10 @@ import glob
 main_page = __import__("Home_Page")
 API_BASE = "http://localhost:8000"
 
+st.set_page_config(page_title="Your Jobs", layout="wide")
+os.makedirs("resume/", exist_ok=True)
+os.makedirs("cover-letter/", exist_ok=True)
+
 # --- Functions for API calls ---
 
 def fetch_tabs_from_api():
@@ -34,7 +38,6 @@ def fetch_description_by_url(tab_name, job_url):
 
 
 if st.session_state.user_email and st.session_state.user_name:
-    st.set_page_config(page_title="Your Jobs", layout="wide")
     st.title("Your Space for Each Job Application")
 
     # Initialize tab list in session state
@@ -125,7 +128,6 @@ if st.session_state.user_email and st.session_state.user_name:
                     letter_path = f"./cover-letter/cover-letter-{job_name}-{job_uuid}.pdf"
                     
                     if os.path.exists(resume_path):
-                        os.makedirs("resume/", exist_ok=True)
                         with open(resume_path, "rb") as file:
                             st.download_button(
                                 label="📥 Download Tailored Resume PDF",
@@ -151,7 +153,6 @@ if st.session_state.user_email and st.session_state.user_name:
                                 st.rerun()
 
                     if os.path.exists(letter_path):
-                        os.makedirs("cover-letter/", exist_ok=True)
                         with open(letter_path, "rb") as file:
                             st.download_button(
                                 label="📥 Download Cover Letter PDF",

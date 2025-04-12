@@ -8,6 +8,8 @@ import firebase_admin
 from firebase_admin import auth, exceptions, credentials, initialize_app
 
 load_dotenv('.env')
+os.makedirs("resume/", exist_ok=True)
+
 CLIENT_ID = os.environ['GOOGLE_OAUTH_CLIENT_ID']
 CLIENT_SECRET = os.environ['GOOGLE_OAUTH_CLIENT_SECRET']
 REDIRECT_URI = os.environ['GOOGLE_OAUTH_REDIRECT_URI']
@@ -252,7 +254,6 @@ def main():
                 )                                
                 if response.status_code == 200:
                     file_name = '_'.join(st.session_state.user_name.split())
-                    os.makedirs("resume/", exist_ok=True)
                     with open(f"resume/resume_{file_name}.pdf", "wb") as f:
                         f.write(response.content)
                     side_col2.success("Resume generated successfully!")
